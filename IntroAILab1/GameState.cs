@@ -6,19 +6,21 @@ using System.Threading.Tasks;
 
 namespace IntroAILab1
 {
-	internal class GameState : IState
+	internal class GameState : IState<GameState>
 	{
 		int[,] board;
 		Vector2Int emptyCoord;
+		Vector2Int size;
 
 		public GameState(int[,] board)
 		{
 			this.board = board;
 			int emptyCoordValue = -1;
 			emptyCoord = new Vector2Int(emptyCoordValue, emptyCoordValue);
-			for (int x = 0; x < board.GetLength(0); x++)
+			size = new Vector2Int(board.GetLength(0), board.GetLength(1));
+			for (int x = 0; x < size.x; x++)
 			{
-				for (int y = 0; y < board.GetLength(1); y++)
+				for (int y = 0; y < size.y; y++)
 				{
 					if (board[x, y] == 0)
 					{
@@ -31,10 +33,17 @@ namespace IntroAILab1
 			}
 		}
 
+		private GameState()
+		{
+
+		}
+
 		GameState Clone()
 		{
-			GameState clone = (GameState)MemberwiseClone();
+			GameState clone = new GameState();//(GameState)MemberwiseClone();
 			clone.board = (int[,])board.Clone();
+			clone.emptyCoord = emptyCoord;
+			clone.size = size;
 			return clone;
 		}
 
@@ -84,7 +93,7 @@ namespace IntroAILab1
 				clone.MoveDown(i);
 				children.Add(clone);
 			}
-			for (int i = 1; i < board.GetLength(0) - emptyCoord.x; i++)
+			for (int i = 1; i < size.x - emptyCoord.x; i++)
 			{
 				var clone = Clone();
 				clone.MoveUp(i);
@@ -96,7 +105,7 @@ namespace IntroAILab1
 				clone.MoveRight(i);
 				children.Add(clone);
 			}
-			for (int i = 1; i < board.GetLength(1) - emptyCoord.y; i++)
+			for (int i = 1; i < size.y - emptyCoord.y; i++)
 			{
 				var clone = Clone();
 				clone.MoveLeft(i);
@@ -107,9 +116,9 @@ namespace IntroAILab1
 
 		public void Print()
 		{
-			for (int x = 0; x < board.GetLength(0); x++)
+			for (int x = 0; x < size.x; x++)
 			{
-				for (int y = 0; y < board.GetLength(1); y++)
+				for (int y = 0; y < size.y; y++)
 				{
 					if (board[x, y] == 0)
 						Console.Write("  ");
@@ -120,23 +129,37 @@ namespace IntroAILab1
 			}
 		}
 
-		List<IState> IState.GeneratePossibleChildren() => GeneratePossibleChildren().Cast<IState>().ToList();
+		public bool StateEquals(GameState other)
+		{
+			if (other.size.x == size.x
+					&& other.size.y == size.y)
+			{
+				for (int x = 0; x < size.x; x++)
+					for (int y = 0; y < size.y; y++)
+						if (board[x, y] != other.board[x, y])
+							return false;
+				return true;
+			}
+			return false;
+		}
+
+		/*List<IState> IState.GeneratePossibleChildren() => GeneratePossibleChildren().Cast<IState>().ToList();
 
 		public bool StateEquals(IState other)
 		{
 			if (other is GameState gs)
 			{ 
-				if (gs.board.GetLength(0) == board.GetLength(0)
-					&& gs.board.GetLength(1) == board.GetLength(1))
+				if (gs.size.x == size.x
+					&& gs.size.y == size.y)
 				{
-					for (int x = 0; x < board.GetLength(0); x++)
-						for (int y = 0; y < board.GetLength(1); y++)
+					for (int x = 0; x < size.x; x++)
+						for (int y = 0; y < size.y; y++)
 							if (board[x, y] != gs.board[x, y])
 								return false;
 					return true;
 				}
 			}
 			return false;
-		}
+		}*/
 	}
 }

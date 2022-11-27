@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace IntroAILab1
 {
-	internal interface IState
+	internal interface IState<T> where T: IState<T>
 	{
 		void Print();
-		bool StateEquals(IState other);
-		List<IState> GeneratePossibleChildren();
+		bool StateEquals(T other);
+		List<T> GeneratePossibleChildren();
 	}
 }

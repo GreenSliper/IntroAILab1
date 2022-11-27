@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IntroAILab1
 {
-	internal class DepthFirstSearch<T> where T : class, IState
+	internal class DepthFirstSearch<T> where T : class, IState<T>
 	{
 		SearchTree<T> tree;
 		public DepthFirstSearch(T startState)
@@ -14,7 +14,7 @@ namespace IntroAILab1
 			tree = new SearchTree<T>(startState);
 		}
 
-		public bool TryFindSolution(T target, out List<T> path)
+		public bool TryFindSolution(T target, int maxSteps, out List<T> path)
 		{
 			path = null;
 			SearchTree<T>.SearchTreeNode current = tree.root;
@@ -26,9 +26,9 @@ namespace IntroAILab1
 					//mark as not the solution && not last
 					current.marked = true;
 					//find next child that is not in the current RootPath (that won't cause cycle)
-					var nextChild = current.children.FirstOrDefault(x => !current.RootPath.Any(y => y.StateEquals(x.value)));
+					var nextChild = current.children.FirstOrDefault(x => !current.RootPath.AsParallel().Any(y => y.StateEquals(x.value)));
 					//if has any children go to first 
-					if (nextChild != null)
+					if (nextChild != null && current.RootPath.Count() < maxSteps)
 						current = nextChild;
 					//if no children present, this is a "dead end", need to switch to other branch
 					else if (current.parent != null)

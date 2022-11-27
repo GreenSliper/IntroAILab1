@@ -16,12 +16,18 @@
 					{3, 4, 5 },
 					{6, 7, 8 }
 				};
-			GameState start = new GameState(startBoard);
+			GameState start = new GameState(solutionBoard);
+			Random rnd = new Random();
+			for (int i = 0; i < 15; i++)
+			{
+				var variations = start.GeneratePossibleChildren();
+				start = variations[rnd.Next(0, variations.Count)];
+			}
 			GameState solution = new GameState(solutionBoard);
 			Console.WriteLine("Start state:");
 			start.Print();
 			DepthFirstSearch<GameState> depthSearch = new(start);
-			if (depthSearch.TryFindSolution(solution, out var path))
+			if (depthSearch.TryFindSolution(solution, 15, out var path))
 			{
 				Console.WriteLine($"Solution has {path.Count} steps:");
 				for (int i = 0; i < path.Count; i++)
