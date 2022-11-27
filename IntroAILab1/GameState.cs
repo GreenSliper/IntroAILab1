@@ -142,24 +142,5 @@ namespace IntroAILab1
 			}
 			return false;
 		}
-
-		/*List<IState> IState.GeneratePossibleChildren() => GeneratePossibleChildren().Cast<IState>().ToList();
-
-		public bool StateEquals(IState other)
-		{
-			if (other is GameState gs)
-			{ 
-				if (gs.size.x == size.x
-					&& gs.size.y == size.y)
-				{
-					for (int x = 0; x < size.x; x++)
-						for (int y = 0; y < size.y; y++)
-							if (board[x, y] != gs.board[x, y])
-								return false;
-					return true;
-				}
-			}
-			return false;
-		}*/
 	}
 }
