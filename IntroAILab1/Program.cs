@@ -4,20 +4,34 @@
 	{
 		static void Main(string[] args)
 		{
-			int[,] board = new int[,]
+			int[,] startBoard = new int[,]
+				{
+					{6, 2, 8 },
+					{4, 1, 7 },
+					{5, 3, 0 }
+				};
+			int[,] solutionBoard = new int[,]
 				{
 					{0, 1, 2 },
-					{3, 4, 5 }//,
-					//{6, 7, 8 }
+					{3, 4, 5 },
+					{6, 7, 8 }
 				};
-			GameState gs = new GameState(board);
-			gs.Print();
-			Console.ReadLine();
-			foreach (var child in gs.GeneratePossibleChildren())
+			GameState start = new GameState(startBoard);
+			GameState solution = new GameState(solutionBoard);
+			Console.WriteLine("Start state:");
+			start.Print();
+			DepthFirstSearch<GameState> depthSearch = new(start);
+			if (depthSearch.TryFindSolution(solution, out var path))
 			{
-				child.Print();
-				Console.ReadLine();
+				Console.WriteLine($"Solution has {path.Count} steps:");
+				for (int i = 0; i < path.Count; i++)
+				{
+					Console.WriteLine($"Step {i+1}:");
+					path[i].Print();
+				}
 			}
+			else
+				Console.WriteLine("No solutions found!");
 		}
 	}
 }

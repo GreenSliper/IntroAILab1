@@ -38,68 +38,68 @@ namespace IntroAILab1
 			return clone;
 		}
 
-		void MoveUp()
+		void MoveUp(int steps)
 		{
-			for (int x = emptyCoord.x + 1; x < board.GetLength(0); x++)
+			for (int x = emptyCoord.x + 1; x <= emptyCoord.x + steps; x++)
 			{
 				board[x - 1, emptyCoord.y] = board[x, emptyCoord.y];
 			}
-			emptyCoord.x = board.GetLength(0) - 1;
+			emptyCoord.x = emptyCoord.x + steps;
 			board[emptyCoord.x, emptyCoord.y] = 0;
 		}
-		void MoveDown()
+		void MoveDown(int steps)
 		{
-			for (int x = emptyCoord.x; x > 0; x--)
+			for (int x = emptyCoord.x; x >= Math.Max(emptyCoord.x - steps, 1); x--)
 			{
 				board[x, emptyCoord.y] = board[x-1, emptyCoord.y];
 			}
-			emptyCoord.x = 0;
+			emptyCoord.x = emptyCoord.x - steps;
 			board[emptyCoord.x, emptyCoord.y] = 0;
 		}
-		void MoveRight()
+		void MoveRight(int steps)
 		{
-			for (int y = emptyCoord.y; y > 0; y--)
+			for (int y = emptyCoord.y; y >= Math.Max(emptyCoord.y - steps, 1); y--)
 			{
 				board[emptyCoord.x, y] = board[emptyCoord.x, y - 1];
 			}
-			emptyCoord.y = 0;
+			emptyCoord.y = emptyCoord.y - steps;
 			board[emptyCoord.x, emptyCoord.y] = 0;
 		}
-		void MoveLeft()
+		void MoveLeft(int steps)
 		{
-			for (int y = emptyCoord.y + 1; y < board.GetLength(1); y++)
+			for (int y = emptyCoord.y + 1; y <= emptyCoord.y + steps; y++)
 			{
 				board[emptyCoord.x, y - 1] = board[emptyCoord.x, y];
 			}
-			emptyCoord.y = board.GetLength(1) - 1;
+			emptyCoord.y = emptyCoord.y + steps;
 			board[emptyCoord.x, emptyCoord.y] = 0;
 		}
 
 		public List<GameState> GeneratePossibleChildren()
 		{
 			List<GameState> children = new();
-			if (emptyCoord.x > 0)
+			for (int i = 1; i <= emptyCoord.x; i++)
 			{
 				var clone = Clone();
-				clone.MoveDown();
+				clone.MoveDown(i);
 				children.Add(clone);
 			}
-			if (emptyCoord.x < board.GetLength(0))
+			for (int i = 1; i < board.GetLength(0) - emptyCoord.x; i++)
 			{
 				var clone = Clone();
-				clone.MoveUp();
+				clone.MoveUp(i);
 				children.Add(clone);
 			}
-			if (emptyCoord.y > 0)
+			for (int i = 1; i <= emptyCoord.y; i++)
 			{
 				var clone = Clone();
-				clone.MoveRight();
+				clone.MoveRight(i);
 				children.Add(clone);
 			}
-			if (emptyCoord.y < board.GetLength(1))
+			for (int i = 1; i < board.GetLength(1) - emptyCoord.y; i++)
 			{
 				var clone = Clone();
-				clone.MoveLeft();
+				clone.MoveLeft(i);
 				children.Add(clone);
 			}
 			return children;
@@ -121,5 +121,22 @@ namespace IntroAILab1
 		}
 
 		List<IState> IState.GeneratePossibleChildren() => GeneratePossibleChildren().Cast<IState>().ToList();
+
+		public bool StateEquals(IState other)
+		{
+			if (other is GameState gs)
+			{ 
+				if (gs.board.GetLength(0) == board.GetLength(0)
+					&& gs.board.GetLength(1) == board.GetLength(1))
+				{
+					for (int x = 0; x < board.GetLength(0); x++)
+						for (int y = 0; y < board.GetLength(1); y++)
+							if (board[x, y] != gs.board[x, y])
+								return false;
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }

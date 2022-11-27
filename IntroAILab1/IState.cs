@@ -9,6 +9,7 @@ namespace IntroAILab1
 	internal interface IState
 	{
 		void Print();
+		bool StateEquals(IState other);
 		List<IState> GeneratePossibleChildren();
 	}
 }
