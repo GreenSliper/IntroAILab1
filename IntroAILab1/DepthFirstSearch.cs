@@ -14,46 +14,33 @@ namespace IntroAILab1
 			tree = new SearchTree<T>(startState);
 		}
 
+		SearchTree<T>.SearchTreeNode FindSolution(SearchTree<T>.SearchTreeNode node, T target, int maxSteps = 0)
+		{
+			//node.marked = true;
+			if(node.value.StateEquals(target))
+				return node;
+			if ((maxSteps != 0 && node.depth == maxSteps) || 
+				(node.parent != null && node.parent.RootPath.AsParallel().Any(x => x.StateEquals(node.value))))
+				return null;
+			node.AddChildren(node.value.GeneratePossibleChildren());
+			foreach (var child in node.children)
+			{
+				//if (child.marked)
+				//	continue;
+				var dfs = FindSolution(child, target, maxSteps);
+				if (dfs != null)
+					return dfs;
+			}
+			return null;
+		}
 		public bool TryFindSolution(T target, out List<T> path, int maxSteps = 0)
 		{
 			path = null;
 			SearchTree<T>.SearchTreeNode current = tree.root;
-			while (!current.value.StateEquals(target))
-			{
-				if (!current.marked && (maxSteps == 0 || current.RootPath.Count() < maxSteps))
-				{
-					current.AddChildren(current.value.GeneratePossibleChildren().Cast<T>());
-					//mark as not the solution && not last
-					current.marked = true;
-					//find next child that is not in the current RootPath (that won't cause cycle)
-					var nextChild = current.children.FirstOrDefault(x => !current.RootPath.AsParallel().Any(y => y.StateEquals(x.value)));
-					//if has any children go to first 
-					if (nextChild != null)
-						current = nextChild;
-					//if no children present, this is a "dead end", need to switch to other branch
-					else if (current.parent != null)
-						current = current.parent;
-					//if we ascended to the root (no parent), there are no solutions
-					else
-						return false;
-				}
-				else //this node already has children, at least one of them is a "dead end"
-				{
-					//next checked child should be not one of the traversed previously (not marked)
-					var nextChild = current.children.FirstOrDefault(x => !x.marked && !current.RootPath.AsParallel().Any(y => y.StateEquals(x.value)));
-					if (nextChild == null)
-						//all children are traversed, there is no solution in this branch
-						if (current.parent != null)
-							current = current.parent;
-						else //ascended to the root, no solutions at all
-							return false;
-					else //there are not traversed children
-						current = nextChild;
-				}
-			}
-			path = new List<T>(current.RootPath);
-			path.Reverse();
-			return true;
+			var soulution = FindSolution(current, target, maxSteps);
+			if (soulution != null)
+				path = soulution.RootPath.Reverse().ToList();
+			return soulution != null;
 		}
 	}
 }

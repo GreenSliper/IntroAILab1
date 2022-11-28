@@ -13,11 +13,14 @@ namespace IntroAILab1
 			public T value;
 			public SearchTreeNode parent;
 			public List<SearchTreeNode> children;
+			public int depth = 0;
 			public bool marked = false;
 			public SearchTreeNode(T value, SearchTreeNode parent, List<SearchTreeNode> children = null)
 			{
 				this.value = value;
 				this.parent = parent;
+				if (parent != null)
+					depth = parent.depth + 1;
 				if(children != null)
 					this.children = children;
 				else

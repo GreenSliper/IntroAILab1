@@ -18,7 +18,7 @@
 				};
 			GameState start = new GameState(solutionBoard);
 			Random rnd = new Random();
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 15; i++)
 			{
 				var variations = start.GeneratePossibleChildren();
 				start = variations[rnd.Next(0, variations.Count)];
@@ -27,12 +27,12 @@
 			Console.WriteLine("Start state:");
 			start.Print();
 			DepthFirstSearch<GameState> depthSearch = new(start);
-			if (depthSearch.TryFindSolution(solution, out var path, 10))
+			if (depthSearch.TryFindSolution(solution, out var path, 15))
 			{
-				Console.WriteLine($"Solution has {path.Count} steps:");
-				for (int i = 0; i < path.Count; i++)
+				Console.WriteLine($"Solution has {path.Count-1} steps:");
+				for (int i = 1; i < path.Count; i++)
 				{
-					Console.WriteLine($"Step {i+1}:");
+					Console.WriteLine($"Step {i}:");
 					path[i].Print();
 				}
 			}
