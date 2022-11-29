@@ -14,6 +14,7 @@ namespace IntroAILab1
 			public SearchTreeNode parent;
 			public List<SearchTreeNode> children;
 			public int depth = 0;
+			public float fValue = 0;
 			public bool marked = false;
 			public SearchTreeNode(T value, SearchTreeNode parent, List<SearchTreeNode> children = null)
 			{

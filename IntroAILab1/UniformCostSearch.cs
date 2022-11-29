@@ -74,7 +74,6 @@ namespace IntroAILab1
 				{
 					child.value.Print();
 					Console.WriteLine();
-
 				}
 				queue.EnqueueRange(current.children, current.depth + 1);
 			}

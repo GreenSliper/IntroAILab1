@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IntroAILab1
 {
-	internal class GameState : IState<GameState>
+	internal class GameState : IAStarState<GameState>
 	{
 		int[,] board;
 		Vector2Int emptyCoord;
@@ -141,6 +141,22 @@ namespace IntroAILab1
 				return true;
 			}
 			return false;
+		}
+
+		/// <summary>
+		/// Based on the number of cells not on their positions
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		/// <exception cref="NotImplementedException"></exception>
+		public float HFunction(GameState other)
+		{
+			int cellNotOnPlaceCount = 0;
+			for (int x = 0; x < size.x; x++)
+				for (int y = 0; y < size.y; y++)
+					if (board[x, y] != other.board[x, y])
+						cellNotOnPlaceCount++;
+			return cellNotOnPlaceCount;
 		}
 	}
 }

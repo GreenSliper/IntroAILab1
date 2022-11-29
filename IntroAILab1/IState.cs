@@ -12,4 +12,10 @@ namespace IntroAILab1
 		bool StateEquals(T other);
 		List<T> GeneratePossibleChildren();
 	}
+
+	internal interface IAStarState<T> : IState<T>
+		where T : IAStarState<T>
+	{
+		float HFunction(T other);
+	}
 }
