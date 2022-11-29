@@ -143,12 +143,10 @@ namespace IntroAILab1
 			return false;
 		}
 
+		/*
 		/// <summary>
 		/// Based on the number of cells not on their positions
 		/// </summary>
-		/// <param name="other"></param>
-		/// <returns></returns>
-		/// <exception cref="NotImplementedException"></exception>
 		public float HFunction(GameState other)
 		{
 			int cellNotOnPlaceCount = 0;
@@ -157,6 +155,30 @@ namespace IntroAILab1
 					if (board[x, y] != other.board[x, y])
 						cellNotOnPlaceCount++;
 			return cellNotOnPlaceCount;
+		}
+		*/
+
+		/// <summary>
+		/// Manhattan distance sum for each cell
+		/// </summary>
+		public float HFunction(GameState other)
+		{
+			int manhattanSum = 0;
+			for (int x = 0; x < size.x; x++)
+				for (int y = 0; y < size.y; y++)
+					if (board[x, y] != other.board[x, y])
+					{
+						bool found = false;
+						for (int x1 = 0; x1 < size.x && !found; x1++)
+							for (int y1 = 0; y1 < size.y; y1++)
+								if (board[x, y] == other.board[x1, y1])
+								{
+									manhattanSum += Math.Abs(x - x1) + Math.Abs(y - y1);
+									found = true;
+									break;
+								}
+					}
+			return manhattanSum;
 		}
 	}
 }

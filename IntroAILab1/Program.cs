@@ -28,7 +28,7 @@
 			start.Print();
 			UniformCostSearch<GameState> ucs = new(start);
 			AStarSearch<GameState> astar = new(start);
-			if (astar.TryFindSolution(solution, out var aStarPath))
+			if (astar.TryFindSolution(solution, out var aStarPath, true))
 			{
 				Console.WriteLine($"A-star solution has {aStarPath.Count - 1} steps:");
 				for (int i = 1; i < aStarPath.Count; i++)
