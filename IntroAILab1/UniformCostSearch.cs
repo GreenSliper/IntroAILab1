@@ -9,7 +9,7 @@ namespace IntroAILab1
 {
 	internal class UniformCostSearch<T> where T : class, IState<T>
 	{
-		SearchTree<T> tree;
+		public SearchTree<T> tree;
 		public UniformCostSearch(T startState)
 		{
 			tree = new SearchTree<T>(startState);
@@ -29,7 +29,7 @@ namespace IntroAILab1
 					path = current.RootPath.Reverse().ToList();
 					return true;
 				}
-				if (current.depth == maxDepth)
+				if (maxDepth > 0 && current.depth == maxDepth)
 					return false;
 				current.AddChildren(current.value.GeneratePossibleChildren());
 				queue.EnqueueRange(current.children, current.depth + 1);
@@ -66,7 +66,7 @@ namespace IntroAILab1
 					path = current.RootPath.Reverse().ToList();
 					return true;
 				}
-				if (current.depth == maxDepth)
+				if (maxDepth > 0 && current.depth == maxDepth)
 					return false;
 				current.AddChildren(current.value.GeneratePossibleChildren());
 				Console.WriteLine("Child states found:");

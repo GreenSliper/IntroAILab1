@@ -27,7 +27,7 @@
 			Console.WriteLine("Start state:");
 			start.Print();
 			AStarSearch<GameState> astar = new(start);
-			if (astar.TryFindSolution(solution, out var aStarPath, true))
+			if (astar.TryFindSolution(solution, out var aStarPath))
 			{
 				Console.WriteLine($"A-star solution has {aStarPath.Count - 1} steps:");
 				for (int i = 1; i < aStarPath.Count; i++)
@@ -39,10 +39,11 @@
 			else
 				Console.WriteLine("No solutions found!");
 
-			/*
+			
 			UniformCostSearch<GameState> ucs = new(start);
-			if (ucs.TryFindSolution(solution, out var path, 15))
+			if (ucs.TryFindSolution(solution, out var path, 0))
 			{
+				Console.WriteLine($"UCS tree size: {ucs.tree.Count()}");
 				Console.WriteLine($"UCS solution has {path.Count-1} steps:");
 				for (int i = 1; i < path.Count; i++)
 				{
@@ -52,7 +53,7 @@
 			}
 			else
 				Console.WriteLine("No solutions found!");
-
+			/*
 			DepthFirstSearch<GameState> dfs = new(start);
 			if (dfs.TryFindSolution(solution, out path, 15))
 			{
