@@ -45,6 +45,14 @@ namespace IntroAILab1
 					}
 				}
 			}
+
+			public int Count()
+			{
+				int cnt = 1;
+				foreach (var child in children)
+					cnt += child.Count();
+				return cnt;
+			}
 		}
 
 		public SearchTreeNode root;
@@ -53,5 +61,7 @@ namespace IntroAILab1
 		{
 			this.root = new SearchTreeNode(root, null);
 		}
+
+		public int Count() => root.Count();
 	}
 }
