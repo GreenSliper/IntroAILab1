@@ -26,14 +26,25 @@
 			GameState solution = new GameState(solutionBoard);
 			Console.WriteLine("Start state:");
 			start.Print();
-			DepthFirstSearch<GameState> depthSearch = new(start);
-			if (depthSearch.TryFindSolution(solution, out var path, 15))
+			UniformCostSearch<GameState> ucs = new(start);
+			if (ucs.TryFindSolution(solution, out var path, 15, true))
 			{
-				Console.WriteLine($"Solution has {path.Count-1} steps:");
+				Console.WriteLine($"UCS solution has {path.Count-1} steps:");
 				for (int i = 1; i < path.Count; i++)
 				{
 					Console.WriteLine($"Step {i}:");
 					path[i].Print();
+				}
+
+				DepthFirstSearch<GameState> dfs = new(start);
+				if (dfs.TryFindSolution(solution, out path, 15))
+				{
+					Console.WriteLine($"DFS solution has {path.Count - 1} steps:");
+					for (int i = 1; i < path.Count; i++)
+					{
+						Console.WriteLine($"Step {i}:");
+						path[i].Print();
+					}
 				}
 			}
 			else
