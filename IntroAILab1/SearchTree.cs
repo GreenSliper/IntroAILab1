@@ -15,7 +15,7 @@ namespace IntroAILab1
 			public List<SearchTreeNode> children;
 			public int depth = 0;
 			public float fValue = 0;
-			public bool marked = false;
+			//public bool marked = false;
 			public SearchTreeNode(T value, SearchTreeNode parent, List<SearchTreeNode> children = null)
 			{
 				this.value = value;
